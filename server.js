@@ -13,13 +13,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 function getAuth() {
   const creds = process.env.GOOGLE_CREDENTIALS;
   if (creds) {
+    const parsed = JSON.parse(creds);
+    parsed.private_key = parsed.private_key.replace(/\\n/g, '\n');
     return new google.auth.GoogleAuth({
-      credentials: JSON.parse(creds),
+      credentials: parsed,
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
   }
+  const keyFile = require('./credentials.json');
+  keyFile.private_key = keyFile.private_key.replace(/\\n/g, '\n');
   return new google.auth.GoogleAuth({
-    keyFile: 'credentials.json',
+    credentials: keyFile,
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
   });
 }
