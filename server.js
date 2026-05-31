@@ -56,7 +56,7 @@ async function syncParticipantToSheet(p) {
     });
     const ids = (res.data.values || []).map(r => r[0]);
     const rowIndex = ids.indexOf(p.id);
-    const row = [p.id, p.name, p.cash, p.position, p.units, p.entryPrice, p.totalPnl, p.round, p.registeredAt];
+    const row = [p.id, p.name, p.email||'', p.cash, p.position, p.units, p.entryPrice, p.totalPnl, p.round, p.registeredAt];
 
     if (rowIndex === -1) {
       // Append new row
@@ -84,7 +84,7 @@ async function syncAllToSheet() {
   try {
     const sheets = await getSheets();
     const allRows = Object.values(participants).map(p =>
-      [p.id, p.name, p.cash, p.position, p.units, p.entryPrice, p.totalPnl, p.round, p.registeredAt]
+      [p.id, p.name, p.email||'', p.cash, p.position, p.units, p.entryPrice, p.totalPnl, p.round, p.registeredAt]
     );
     if (!allRows.length) return;
     // Clear and rewrite all data
@@ -160,14 +160,14 @@ app.get('/api/admin/participants', (req, res) => {
 // ── PARTICIPANT: register ──
 // Race condition prevention: one registration per name (case-insensitive)
 app.post('/api/participant/register', async (req, res) => {
-  const { name } = req.body;
-  if (!name || name.trim() === '') {
-    return res.json({ success: false, message: 'Enter your name' });
-  }
+  const { name, email } = req.body;
+  if (!name || name.trim() === '') return res.json({ success: false, message: 'Enter your name' });
+  if (!email || !email.includes('@')) return res.json({ success: false, message: 'Enter a valid email' });
 
-  const key = name.trim().toLowerCase();
+  // Unique key = name + email (both lowercase, trimmed)
+  const key = (name.trim() + '|' + email.trim()).toLowerCase();
 
-  // Check if name already registered — return same session
+  // If already registered — return same session (handles duplicate device)
   if (participants[key]) {
     const p = participants[key];
     return res.json({
@@ -185,6 +185,7 @@ app.post('/api/participant/register', async (req, res) => {
   const p = {
     id,
     name: name.trim(),
+    email: email.trim().toLowerCase(),
     cash: 10000,
     position: 'FLAT',
     units: 0,
