@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuantX — Admin</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --teal:#00f5c3; --red:#ff4444; --bg:#060c12; --bg2:#0d1821; --bg3:#132030; --border:rgba(0,245,195,0.15); --dim:#7a9a90; }
+body { background:var(--bg); color:#fff; font-family:'Segoe UI',Arial,sans-serif; min-height:100vh; }
+
+#login { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg); z-index:99; }
+#login h1 { font-size:42px; font-weight:900; color:var(--teal); margin-bottom:4px; }
+#login p { font-size:12px; color:var(--dim); letter-spacing:3px; margin-bottom:36px; }
+.lbox { background:var(--bg2); border:1px solid rgba(0,245,195,0.3); border-radius:14px; padding:28px; width:90%; max-width:340px; }
+.lbox label { display:block; font-size:11px; color:var(--dim); letter-spacing:2px; margin-bottom:8px; }
+.lbox input { width:100%; background:var(--bg3); border:1px solid var(--border); color:#fff; padding:14px; border-radius:8px; font-size:16px; outline:none; margin-bottom:12px; }
+.lbox input:focus { border-color:var(--teal); }
+.btn-teal { width:100%; background:var(--teal); color:#000; border:none; padding:15px; border-radius:8px; font-size:15px; font-weight:800; cursor:pointer; }
+.btn-red { background:var(--red); color:#fff; }
+
+#admin { display:none; max-width:700px; margin:0 auto; padding:24px 16px; }
+.admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+.admin-header h1 { font-size:26px; font-weight:900; color:var(--teal); }
+.status-pill { font-size:12px; padding:6px 16px; border-radius:20px; border:1px solid var(--border); color:var(--dim); }
+.status-pill.active { background:rgba(0,245,195,0.1); color:var(--teal); border-color:var(--teal); }
+
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:16px; }
+.card h2 { font-size:14px; color:var(--teal); letter-spacing:2px; margin-bottom:16px; }
+.card label { display:block; font-size:11px; color:var(--dim); letter-spacing:1px; margin-bottom:6px; margin-top:12px; }
+.card input, .card select { width:100%; background:var(--bg3); border:1px solid var(--border); color:#fff; padding:12px; border-radius:8px; font-size:14px; outline:none; }
+.card input:focus { border-color:var(--teal); }
+.btn-action { width:100%; margin-top:14px; padding:15px; border-radius:10px; border:none; font-size:15px; font-weight:800; cursor:pointer; transition:opacity 0.2s; }
+.btn-action:hover { opacity:0.85; }
+.btn-start { background:var(--teal); color:#000; }
+.btn-end { background:var(--red); color:#fff; }
+
+.answer-reveal { margin-top:14px; padding:14px; background:rgba(0,245,195,0.08); border:1px solid rgba(0,245,195,0.2); border-radius:10px; font-size:16px; font-weight:700; color:var(--teal); text-align:center; display:none; }
+
+.stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
+.stat { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
+.stat .lbl { font-size:10px; color:var(--dim); letter-spacing:1px; margin-bottom:4px; }
+.stat .val { font-size:22px; font-weight:900; color:var(--teal); }
+
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th { text-align:left; padding:8px 10px; color:var(--dim); font-size:10px; letter-spacing:1px; border-bottom:1px solid var(--border); }
+td { padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.up { color:var(--teal); font-weight:700; }
+.dn { color:var(--red); font-weight:700; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <h1>QuantX</h1>
+  <p>ADMIN PANEL · IIT BHU</p>
+  <div class="lbox">
+    <label>ADMIN PASSWORD</label>
+    <input type="password" id="pwd-inp" placeholder="Enter password">
+    <button class="btn-teal" onclick="adminLogin()">LOGIN →</button>
+    <div id="login-err" style="color:var(--red);font-size:13px;margin-top:10px;text-align:center;"></div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin">
+  <div class="admin-header">
+    <h1>⚡ QuantX Admin</h1>
+    <div class="status-pill" id="status-pill">INACTIVE</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat"><div class="lbl">ROUND</div><div class="val" id="st-round">0/15</div></div>
+    <div class="stat"><div class="lbl">LIVE PRICE</div><div class="val" id="st-price">₹1,000</div></div>
+    <div class="stat"><div class="lbl">PARTICIPANTS</div><div class="val" id="st-parts">0</div></div>
+  </div>
+
+  <!-- START ROUND -->
+  <div class="card">
+    <h2>① START ROUND</h2>
+    <label>ROUND NUMBER (1–15)</label>
+    <input type="number" id="round-num" placeholder="e.g. 1" min="1" max="15">
+    <label>BULLETIN IMAGE URL</label>
+    <input type="text" id="img-url" placeholder="https://i.ibb.co/your-image.jpg">
+    <label>ASSET PRICE THIS ROUND</label>
+    <input type="number" id="round-price" placeholder="e.g. 1050">
+    <label>CORRECT DIRECTION</label>
+    <select id="correct-dir">
+      <option value="">Select answer</option>
+      <option value="BUY">BUY ▲</option>
+      <option value="SELL">SELL ▼</option>
+      <option value="HOLD">HOLD</option>
+    </select>
+    <button class="btn-action btn-start" onclick="startRound()">🚀 DROP BULLETIN & START 30s TIMER</button>
+  </div>
+
+  <!-- END ROUND -->
+  <div class="card">
+    <h2>② END ROUND & CALCULATE PnL</h2>
+    <label>NEW PRICE AFTER ROUND</label>
+    <input type="number" id="end-price" placeholder="e.g. 1120">
+    <button class="btn-action btn-end" onclick="endRound()">🔴 END ROUND & UPDATE ALL PnL</button>
+    <div class="answer-reveal" id="answer-reveal"></div>
+  </div>
+
+  <!-- LIVE PARTICIPANTS -->
+  <div class="card">
+    <h2>LIVE PARTICIPANTS</h2>
+    <div id="participants-table"><div style="color:var(--dim);font-size:13px;text-align:center;padding:16px;">No participants yet</div></div>
+  </div>
+</div>
+
+<script>
+let authenticated = false;
+
+async function adminLogin() {
+  const pwd = document.getElementById('pwd-inp').value;
+  const r = await fetch('/api/admin/login', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ password: pwd })
+  });
+  const d = await r.json();
+  if (d.success) {
+    authenticated = true;
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('admin').style.display = 'block';
+    startPolling();
+  } else {
+    document.getElementById('login-err').textContent = 'Wrong password';
+  }
+}
+
+async function startRound() {
+  const round = document.getElementById('round-num').value;
+  const imageUrl = document.getElementById('img-url').value;
+  const newPrice = document.getElementById('round-price').value;
+  const correctDirection = document.getElementById('correct-dir').value;
+  if (!round || !imageUrl || !newPrice || !correctDirection) { alert('Fill all fields'); return; }
+  const r = await fetch('/api/admin/start-round', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ round, imageUrl, newPrice: parseFloat(newPrice), correctDirection })
+  });
+  const d = await r.json();
+  if (d.success) {
+    document.getElementById('answer-reveal').style.display = 'none';
+    alert(`Round ${round} started! 30 second timer running.`);
+  }
+}
+
+async function endRound() {
+  const newPrice = document.getElementById('end-price').value;
+  if (!newPrice) { alert('Enter new price'); return; }
+  const r = await fetch('/api/admin/end-round', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ newPrice: parseFloat(newPrice) })
+  });
+  const d = await r.json();
+  if (d.success) {
+    const state = await (await fetch('/api/game-state')).json();
+    const reveal = document.getElementById('answer-reveal');
+    reveal.style.display = 'block';
+    reveal.textContent = `✅ CORRECT ANSWER: ${state.correctDirection} | NEW PRICE: ₹${parseFloat(newPrice).toLocaleString()}`;
+  }
+}
+
+function startPolling() {
+  setInterval(pollState, 2000);
+  setInterval(pollParticipants, 3000);
+  pollParticipants();
+}
+
+async function pollState() {
+  try {
+    const r = await fetch('/api/game-state');
+    const s = await r.json();
+    document.getElementById('st-round').textContent = s.currentRound + '/15';
+    document.getElementById('st-price').textContent = '₹' + s.currentPrice.toLocaleString();
+    const pill = document.getElementById('status-pill');
+    pill.textContent = s.timerActive ? 'ROUND ACTIVE' : (s.gameActive ? 'BETWEEN ROUNDS' : 'INACTIVE');
+    pill.className = 'status-pill' + (s.timerActive ? ' active' : '');
+  } catch(e) {}
+}
+
+async function pollParticipants() {
+  try {
+    const r = await fetch('/api/admin/participants');
+    const parts = await r.json();
+    document.getElementById('st-parts').textContent = parts.length;
+    const el = document.getElementById('participants-table');
+    if (!parts.length) {
+      el.innerHTML = '<div style="color:var(--dim);font-size:13px;text-align:center;padding:16px;">No participants yet</div>';
+      return;
+    }
+    const sorted = parts.sort((a,b) => b.totalPnl - a.totalPnl);
+    el.innerHTML = `<table>
+      <tr><th>#</th><th>NAME</th><th>CASH</th><th>POSITION</th><th>TOTAL PnL</th></tr>
+      ${sorted.map((p,i) => `<tr>
+        <td>${i+1}</td>
+        <td>${p.name}</td>
+        <td>₹${Math.round(p.cash).toLocaleString()}</td>
+        <td style="color:${p.position==='BUY'?'var(--teal)':p.position==='SELL'?'var(--red)':'var(--dim)'}">${p.position} ${p.units>0?p.units:''}</td>
+        <td class="${p.totalPnl>=0?'up':'dn'}">${p.totalPnl>=0?'+':''}₹${Math.round(p.totalPnl).toLocaleString()}</td>
+      </tr>`).join('')}
+    </table>`;
+  } catch(e) {}
+}
+
+document.getElementById('pwd-inp').addEventListener('keydown', e => { if(e.key==='Enter') adminLogin(); });
+</script>
+</body>
+</html>
