@@ -17,39 +17,71 @@ body { background:var(--bg); color:#fff; font-family:'Segoe UI',Arial,sans-serif
 .lbox input { width:100%; background:var(--bg3); border:1px solid var(--border); color:#fff; padding:14px; border-radius:8px; font-size:16px; outline:none; margin-bottom:12px; }
 .lbox input:focus { border-color:var(--teal); }
 .btn-teal { width:100%; background:var(--teal); color:#000; border:none; padding:15px; border-radius:8px; font-size:15px; font-weight:800; cursor:pointer; }
-.btn-red { background:var(--red); color:#fff; }
 
-#admin { display:none; max-width:700px; margin:0 auto; padding:24px 16px; }
-.admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+#admin { display:none; max-width:760px; margin:0 auto; padding:24px 16px 48px; }
+.admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
 .admin-header h1 { font-size:26px; font-weight:900; color:var(--teal); }
+.header-right { display:flex; align-items:center; gap:10px; }
 .status-pill { font-size:12px; padding:6px 16px; border-radius:20px; border:1px solid var(--border); color:var(--dim); }
 .status-pill.active { background:rgba(0,245,195,0.1); color:var(--teal); border-color:var(--teal); }
 
 .card { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:16px; }
-.card h2 { font-size:14px; color:var(--teal); letter-spacing:2px; margin-bottom:16px; }
-.card label { display:block; font-size:11px; color:var(--dim); letter-spacing:1px; margin-bottom:6px; margin-top:12px; }
-.card input, .card select { width:100%; background:var(--bg3); border:1px solid var(--border); color:#fff; padding:12px; border-radius:8px; font-size:14px; outline:none; }
-.card input:focus { border-color:var(--teal); }
-.btn-action { width:100%; margin-top:14px; padding:15px; border-radius:10px; border:none; font-size:15px; font-weight:800; cursor:pointer; transition:opacity 0.2s; }
+.card h2 { font-size:13px; color:var(--teal); letter-spacing:2px; margin-bottom:16px; }
+
+/* STATS */
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px; }
+.stat { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
+.stat .lbl { font-size:10px; color:var(--dim); letter-spacing:1px; margin-bottom:4px; }
+.stat .val { font-size:20px; font-weight:900; color:var(--teal); }
+
+/* ROUND BUTTONS GRID */
+.round-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+.btn-round {
+  background:var(--bg3); border:1px solid var(--border); color:#fff;
+  padding:14px 6px; border-radius:10px; font-size:14px; font-weight:700;
+  cursor:pointer; transition:all 0.15s; text-align:center;
+}
+.btn-round:hover { border-color:var(--teal); color:var(--teal); }
+.btn-round.active { background:var(--teal); color:#000; border-color:var(--teal); }
+.btn-round.done { background:rgba(0,245,195,0.08); color:var(--teal); border-color:rgba(0,245,195,0.3); }
+.btn-round:disabled { opacity:0.4; cursor:not-allowed; }
+
+/* phase labels */
+.phase-label { font-size:10px; color:var(--dim); letter-spacing:2px; margin-bottom:8px; margin-top:14px; }
+.phase-label:first-of-type { margin-top:0; }
+
+/* END ROUND */
+.btn-action { width:100%; margin-top:0; padding:15px; border-radius:10px; border:none; font-size:15px; font-weight:800; cursor:pointer; transition:opacity 0.2s; }
 .btn-action:hover { opacity:0.85; }
 .btn-start { background:var(--teal); color:#000; }
 .btn-end { background:var(--red); color:#fff; }
+.btn-refresh { background:var(--bg3); color:var(--teal); border:1px solid var(--border); padding:8px 16px; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; }
+.btn-refresh:hover { border-color:var(--teal); }
 
-.answer-reveal { margin-top:14px; padding:14px; background:rgba(0,245,195,0.08); border:1px solid rgba(0,245,195,0.2); border-radius:10px; font-size:16px; font-weight:700; color:var(--teal); text-align:center; display:none; }
+/* answer reveal */
+.answer-reveal { margin-top:14px; padding:14px; background:rgba(0,245,195,0.08); border:1px solid rgba(0,245,195,0.2); border-radius:10px; font-size:15px; font-weight:700; color:var(--teal); text-align:center; display:none; }
 
-.stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
-.stat { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
-.stat .lbl { font-size:10px; color:var(--dim); letter-spacing:1px; margin-bottom:4px; }
-.stat .val { font-size:22px; font-weight:900; color:var(--teal); }
+/* current round info */
+.round-info { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+.ri { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:10px 16px; font-size:13px; }
+.ri .lbl { font-size:10px; color:var(--dim); letter-spacing:1px; margin-bottom:3px; }
+.ri .val { font-weight:800; color:#fff; }
 
+/* participants table */
 table { width:100%; border-collapse:collapse; font-size:13px; }
 th { text-align:left; padding:8px 10px; color:var(--dim); font-size:10px; letter-spacing:1px; border-bottom:1px solid var(--border); }
 td { padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.04); }
 .up { color:var(--teal); font-weight:700; }
 .dn { color:var(--red); font-weight:700; }
+
+/* toast */
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--bg2); border:1px solid rgba(0,245,195,0.4); border-radius:10px; padding:12px 24px; font-size:14px; opacity:0; transition:all 0.25s; z-index:300; pointer-events:none; white-space:nowrap; }
+.toast.on { opacity:1; }
 </style>
 </head>
 <body>
+
+<div class="toast" id="toast"></div>
 
 <!-- LOGIN -->
 <div id="login">
@@ -67,40 +99,52 @@ td { padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.04); }
 <div id="admin">
   <div class="admin-header">
     <h1>⚡ QuantX Admin</h1>
-    <div class="status-pill" id="status-pill">INACTIVE</div>
+    <div class="header-right">
+      <button class="btn-refresh" onclick="refreshRegistrations()">↺ Refresh Registrations</button>
+      <div class="status-pill" id="status-pill">INACTIVE</div>
+    </div>
   </div>
 
   <!-- STATS -->
   <div class="stats-grid">
     <div class="stat"><div class="lbl">ROUND</div><div class="val" id="st-round">0/15</div></div>
-    <div class="stat"><div class="lbl">LIVE PRICE</div><div class="val" id="st-price">₹1,000</div></div>
+    <div class="stat"><div class="lbl">CURRENT PRICE</div><div class="val" id="st-price">—</div></div>
+    <div class="stat"><div class="lbl">FUTURE PRICE</div><div class="val" id="st-future">—</div></div>
     <div class="stat"><div class="lbl">PARTICIPANTS</div><div class="val" id="st-parts">0</div></div>
   </div>
 
-  <!-- START ROUND -->
+  <!-- POST ROUND -->
   <div class="card">
-    <h2>① START ROUND</h2>
-    <label>ROUND NUMBER (1–15)</label>
-    <input type="number" id="round-num" placeholder="e.g. 1" min="1" max="15">
-    <label>BULLETIN IMAGE URL</label>
-    <input type="text" id="img-url" placeholder="https://i.ibb.co/your-image.jpg">
-    <label>ASSET PRICE THIS ROUND</label>
-    <input type="number" id="round-price" placeholder="e.g. 1050">
-    <label>CORRECT DIRECTION</label>
-    <select id="correct-dir">
-      <option value="">Select answer</option>
-      <option value="BUY">BUY ▲</option>
-      <option value="SELL">SELL ▼</option>
-      <option value="HOLD">HOLD</option>
-    </select>
-    <button class="btn-action btn-start" onclick="startRound()">🚀 DROP BULLETIN & START 30s TIMER</button>
+    <h2>① POST ROUND — DATA FETCHED FROM SHEET AUTOMATICALLY</h2>
+
+    <div class="phase-label">PHASE 1 — SIGNAL (Rounds 1–5)</div>
+    <div class="round-grid" id="phase1-grid"></div>
+
+    <div class="phase-label">PHASE 2 — NOISE (Rounds 6–10)</div>
+    <div class="round-grid" id="phase2-grid"></div>
+
+    <div class="phase-label">PHASE 3 — PRESSURE (Rounds 11–15)</div>
+    <div class="round-grid" id="phase3-grid"></div>
+  </div>
+
+  <!-- CURRENT ROUND INFO (shown after posting) -->
+  <div class="card" id="current-round-card" style="display:none;">
+    <h2>② CURRENT ROUND INFO</h2>
+    <div class="round-info">
+      <div class="ri"><div class="lbl">STOCK</div><div class="val" id="ri-stock">—</div></div>
+      <div class="ri"><div class="lbl">TICKER</div><div class="val" id="ri-ticker">—</div></div>
+      <div class="ri"><div class="lbl">CURRENT PRICE</div><div class="val" id="ri-current">—</div></div>
+      <div class="ri"><div class="lbl">FUTURE PRICE</div><div class="val" id="ri-future">—</div></div>
+      <div class="ri"><div class="lbl">CORRECT DIRECTION</div><div class="val" id="ri-dir">—</div></div>
+    </div>
   </div>
 
   <!-- END ROUND -->
   <div class="card">
-    <h2>② END ROUND & CALCULATE PnL</h2>
-    <label>NEW PRICE AFTER ROUND</label>
-    <input type="number" id="end-price" placeholder="e.g. 1120">
+    <h2>③ END ROUND & CALCULATE PnL</h2>
+    <p style="font-size:13px;color:var(--dim);margin-bottom:14px;">
+      PnL is calculated using the future price already loaded from the sheet. No manual input needed.
+    </p>
     <button class="btn-action btn-end" onclick="endRound()">🔴 END ROUND & UPDATE ALL PnL</button>
     <div class="answer-reveal" id="answer-reveal"></div>
   </div>
@@ -108,12 +152,42 @@ td { padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.04); }
   <!-- LIVE PARTICIPANTS -->
   <div class="card">
     <h2>LIVE PARTICIPANTS</h2>
-    <div id="participants-table"><div style="color:var(--dim);font-size:13px;text-align:center;padding:16px;">No participants yet</div></div>
+    <div id="participants-table">
+      <div style="color:var(--dim);font-size:13px;text-align:center;padding:16px;">No participants yet</div>
+    </div>
   </div>
 </div>
 
 <script>
 let authenticated = false;
+let activeRound = 0;
+let completedRounds = new Set();
+
+// Build round buttons
+function buildRoundButtons() {
+  ['phase1-grid','phase2-grid','phase3-grid'].forEach((id, pi) => {
+    const grid = document.getElementById(id);
+    const start = pi * 5 + 1;
+    for (let i = start; i < start + 5; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'btn-round';
+      btn.id = 'rb-' + i;
+      btn.textContent = 'Round ' + i;
+      btn.onclick = () => startRound(i);
+      grid.appendChild(btn);
+    }
+  });
+}
+
+function highlightRoundButtons() {
+  for (let i = 1; i <= 15; i++) {
+    const btn = document.getElementById('rb-' + i);
+    if (!btn) continue;
+    btn.className = 'btn-round';
+    if (i === activeRound) btn.classList.add('active');
+    else if (completedRounds.has(i)) btn.classList.add('done');
+  }
+}
 
 async function adminLogin() {
   const pwd = document.getElementById('pwd-inp').value;
@@ -126,43 +200,92 @@ async function adminLogin() {
     authenticated = true;
     document.getElementById('login').style.display = 'none';
     document.getElementById('admin').style.display = 'block';
+    buildRoundButtons();
     startPolling();
   } else {
     document.getElementById('login-err').textContent = 'Wrong password';
   }
 }
 
-async function startRound() {
-  const round = document.getElementById('round-num').value;
-  const imageUrl = document.getElementById('img-url').value;
-  const newPrice = document.getElementById('round-price').value;
-  const correctDirection = document.getElementById('correct-dir').value;
-  if (!round || !imageUrl || !newPrice || !correctDirection) { alert('Fill all fields'); return; }
-  const r = await fetch('/api/admin/start-round', {
-    method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ round, imageUrl, newPrice: parseFloat(newPrice), correctDirection })
-  });
-  const d = await r.json();
-  if (d.success) {
-    document.getElementById('answer-reveal').style.display = 'none';
-    alert(`Round ${round} started! 30 second timer running.`);
+async function startRound(n) {
+  const btn = document.getElementById('rb-' + n);
+  btn.disabled = true;
+  btn.textContent = 'Loading...';
+
+  try {
+    const r = await fetch('/api/admin/start-round', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ roundNumber: n })
+    });
+    const d = await r.json();
+
+    if (d.success) {
+      activeRound = n;
+      highlightRoundButtons();
+      document.getElementById('answer-reveal').style.display = 'none';
+
+      // Show current round info card
+      const gs = d.gameState;
+      document.getElementById('current-round-card').style.display = 'block';
+      document.getElementById('ri-stock').textContent = gs.stockName || '—';
+      document.getElementById('ri-ticker').textContent = gs.ticker || '—';
+      document.getElementById('ri-current').textContent = gs.currentPrice ? '₹' + gs.currentPrice.toLocaleString() : '—';
+      document.getElementById('ri-future').textContent = gs.futurePrice ? '₹' + gs.futurePrice.toLocaleString() : '—';
+      const dirEl = document.getElementById('ri-dir');
+      dirEl.textContent = gs.correctDirection || '—';
+      dirEl.style.color = gs.correctDirection === 'BUY' ? 'var(--teal)' : gs.correctDirection === 'SELL' ? 'var(--red)' : '#fff';
+
+      toast('Round ' + n + ' started — 30s timer running');
+    } else {
+      toast('Error: ' + (d.message || 'Failed to start round'));
+      btn.disabled = false;
+      btn.textContent = 'Round ' + n;
+    }
+  } catch(e) {
+    toast('Network error');
+    btn.disabled = false;
+    btn.textContent = 'Round ' + n;
   }
 }
 
 async function endRound() {
-  const newPrice = document.getElementById('end-price').value;
-  if (!newPrice) { alert('Enter new price'); return; }
-  const r = await fetch('/api/admin/end-round', {
-    method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ newPrice: parseFloat(newPrice) })
-  });
-  const d = await r.json();
-  if (d.success) {
-    const state = await (await fetch('/api/game-state')).json();
-    const reveal = document.getElementById('answer-reveal');
-    reveal.style.display = 'block';
-    reveal.textContent = `✅ CORRECT ANSWER: ${state.correctDirection} | NEW PRICE: ₹${parseFloat(newPrice).toLocaleString()}`;
-  }
+  try {
+    const r = await fetch('/api/admin/end-round', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({})
+    });
+    const d = await r.json();
+
+    if (d.success) {
+      if (activeRound > 0) completedRounds.add(activeRound);
+      highlightRoundButtons();
+
+      const reveal = document.getElementById('answer-reveal');
+      reveal.style.display = 'block';
+      const diff = d.difference;
+      const sign = diff >= 0 ? '+' : '';
+      reveal.innerHTML =
+        '✅ CORRECT ANSWER: <strong>' + d.correctDirection + '</strong> &nbsp;|&nbsp; ' +
+        '₹' + d.currentPrice.toLocaleString() + ' → ₹' + d.futurePrice.toLocaleString() +
+        ' &nbsp;(<span style="color:' + (diff>=0?'var(--teal)':'var(--red)') + '">' + sign + '₹' + Math.round(diff).toLocaleString() + '</span>)';
+
+      toast('Round ended — PnL updated for all participants');
+    } else {
+      toast('Error ending round');
+    }
+  } catch(e) { toast('Network error'); }
+}
+
+async function refreshRegistrations() {
+  try {
+    const r = await fetch('/api/admin/refresh-registrations', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({})
+    });
+    const d = await r.json();
+    if (d.success) toast('Registration cache refreshed — ' + d.count + ' participants loaded');
+    else toast('Refresh failed');
+  } catch(e) { toast('Network error'); }
 }
 
 function startPolling() {
@@ -175,11 +298,20 @@ async function pollState() {
   try {
     const r = await fetch('/api/game-state');
     const s = await r.json();
-    document.getElementById('st-round').textContent = s.currentRound + '/15';
-    document.getElementById('st-price').textContent = '₹' + s.currentPrice.toLocaleString();
+    document.getElementById('st-round').textContent = (s.currentRound || 0) + '/15';
+    document.getElementById('st-price').textContent = s.currentPrice ? '₹' + s.currentPrice.toLocaleString() : '—';
+    document.getElementById('st-future').textContent = s.futurePrice ? '₹' + s.futurePrice.toLocaleString() : '—';
     const pill = document.getElementById('status-pill');
-    pill.textContent = s.timerActive ? 'ROUND ACTIVE' : (s.gameActive ? 'BETWEEN ROUNDS' : 'INACTIVE');
-    pill.className = 'status-pill' + (s.timerActive ? ' active' : '');
+    if (s.timerActive) {
+      pill.textContent = 'ROUND ' + s.currentRound + ' LIVE';
+      pill.className = 'status-pill active';
+    } else if (s.gameActive) {
+      pill.textContent = 'BETWEEN ROUNDS';
+      pill.className = 'status-pill';
+    } else {
+      pill.textContent = 'INACTIVE';
+      pill.className = 'status-pill';
+    }
   } catch(e) {}
 }
 
@@ -193,18 +325,26 @@ async function pollParticipants() {
       el.innerHTML = '<div style="color:var(--dim);font-size:13px;text-align:center;padding:16px;">No participants yet</div>';
       return;
     }
-    const sorted = parts.sort((a,b) => b.totalPnl - a.totalPnl);
+    const sorted = [...parts].sort((a,b) => b.totalPnl - a.totalPnl);
     el.innerHTML = `<table>
-      <tr><th>#</th><th>NAME</th><th>CASH</th><th>POSITION</th><th>TOTAL PnL</th></tr>
+      <tr><th>#</th><th>NAME</th><th>EMAIL</th><th>POSITION</th><th>UNITS</th><th>TOTAL PnL</th></tr>
       ${sorted.map((p,i) => `<tr>
         <td>${i+1}</td>
         <td>${p.name}</td>
-        <td>₹${Math.round(p.cash).toLocaleString()}</td>
-        <td style="color:${p.position==='BUY'?'var(--teal)':p.position==='SELL'?'var(--red)':'var(--dim)'}">${p.position} ${p.units>0?p.units:''}</td>
+        <td style="color:var(--dim);font-size:12px;">${p.email||''}</td>
+        <td style="color:${p.position==='BUY'?'var(--teal)':p.position==='SELL'?'var(--red)':'var(--dim)'}">${p.position||'FLAT'}</td>
+        <td style="color:var(--dim)">${p.units>0?p.units:'—'}</td>
         <td class="${p.totalPnl>=0?'up':'dn'}">${p.totalPnl>=0?'+':''}₹${Math.round(p.totalPnl).toLocaleString()}</td>
       </tr>`).join('')}
     </table>`;
   } catch(e) {}
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 3000);
 }
 
 document.getElementById('pwd-inp').addEventListener('keydown', e => { if(e.key==='Enter') adminLogin(); });
