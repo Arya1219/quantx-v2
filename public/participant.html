@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>QuantX — Live Trading</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -12,8 +12,12 @@
 }
 html,body { height:100%; background:var(--bg); color:var(--text); font-family:'Segoe UI',Arial,sans-serif; overflow:hidden; }
 
-/* REGISTER */
-#reg { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg); z-index:99; overflow-y:auto; padding:20px 0; }
+/* ── REGISTER ── */
+#reg {
+  position:fixed; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  background:var(--bg); z-index:99; overflow-y:auto; padding:20px 0;
+}
 #reg h1 { font-size:52px; font-weight:900; color:var(--teal); letter-spacing:-2px; margin-bottom:4px; }
 #reg p  { font-size:13px; color:var(--dim); letter-spacing:3px; margin-bottom:32px; }
 .rbox { background:var(--bg2); border:1px solid rgba(0,245,195,0.35); border-radius:16px; padding:28px; width:92%; max-width:400px; }
@@ -22,11 +26,15 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
 .rbox input { width:100%; background:var(--bg3); border:1px solid var(--border); color:#fff; padding:14px 16px; border-radius:10px; font-size:17px; outline:none; }
 .rbox input:focus { border-color:var(--teal); }
 .rbox input::placeholder { color:var(--dim); }
-.disclaimer { margin-top:16px; padding:12px 14px; background:rgba(0,245,195,0.05); border:1px solid rgba(0,245,195,0.2); border-radius:10px; font-size:12px; color:var(--teal); line-height:1.7; text-align:center; }
-.disclaimer span { color:#fff; font-weight:700; }
-.btn-go { width:100%; margin-top:14px; background:var(--teal); color:#000; border:none; padding:18px; border-radius:10px; font-size:17px; font-weight:800; cursor:pointer; }
+.pwd-hint {
+  margin-top:10px; padding:10px 14px;
+  background:rgba(0,245,195,0.05); border:1px solid rgba(0,245,195,0.2);
+  border-radius:8px; font-size:12px; color:var(--dim); line-height:1.7;
+}
+.pwd-hint span { color:var(--teal); font-weight:700; }
+.btn-go { width:100%; margin-top:16px; background:var(--teal); color:#000; border:none; padding:18px; border-radius:10px; font-size:17px; font-weight:800; cursor:pointer; }
 
-/* APP */
+/* ── APP ── */
 #app { display:none; height:100vh; flex-direction:column; }
 
 /* TOP BAR */
@@ -45,7 +53,7 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
 .tk-chg { font-size:10px; }
 .up{color:var(--teal)} .dn{color:var(--red)} .nt{color:var(--dim)}
 
-/* BODY — image 55%, controls 45% */
+/* BODY */
 .body { flex:1; display:grid; grid-template-columns:55fr 45fr; overflow:hidden; min-height:0; }
 
 /* LEFT: IMAGE */
@@ -59,7 +67,7 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
 .blink { animation:bl 1.2s infinite; }
 @keyframes bl{0%,100%{opacity:1}50%{opacity:0.1}}
 
-/* RIGHT: CONTROLS — bigger, more space */
+/* RIGHT: CONTROLS */
 .ctrl-panel { background:var(--bg); display:flex; flex-direction:column; overflow:hidden; }
 
 /* TIMER BLOCK */
@@ -77,29 +85,30 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
 .timer-num.urgent { color:var(--red); animation:pulse 0.5s infinite; }
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 
-/* TRADE AREA — scrollable interior */
+/* TRADE AREA */
 .trade-area { flex:1; overflow-y:auto; padding:18px 22px; display:flex; flex-direction:column; gap:16px; }
 .trade-area::-webkit-scrollbar { width:3px; }
 .trade-area::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 
 .sec-lbl { font-size:11px; color:var(--dim); letter-spacing:2px; margin-bottom:8px; font-weight:700; }
 
-/* BUY / SELL — BIGGER */
+/* BUY / SELL */
 .dir-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .btn-dir {
   padding:22px 10px; border-radius:14px; border:2px solid transparent;
   font-size:22px; font-weight:900; cursor:pointer; transition:all 0.15s; letter-spacing:1px;
+  min-height:64px;
 }
 .btn-dir.buy  { background:rgba(0,245,195,0.08); color:var(--teal); border-color:rgba(0,245,195,0.25); }
 .btn-dir.sell { background:rgba(255,68,68,0.08);  color:var(--red);  border-color:rgba(255,68,68,0.25); }
 .btn-dir.buy.sel  { background:var(--teal); color:#000; border-color:var(--teal); }
 .btn-dir.sell.sel { background:var(--red);  color:#fff; border-color:var(--red); }
 
-/* QUANTITY — BIGGER */
+/* QUANTITY */
 .qty-row { display:flex; align-items:center; gap:10px; }
-.qty-btn { width:50px; height:50px; background:var(--bg3); border:1px solid var(--border); color:var(--teal); font-size:28px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:700; }
-.qty-btn:active { opacity:0.7; }
-.qty-inp { flex:1; background:var(--bg3); border:1px solid rgba(0,245,195,0.3); color:var(--teal); text-align:center; font-size:30px; font-weight:900; padding:12px; border-radius:12px; outline:none; min-width:0; }
+.qty-btn { width:54px; height:54px; background:var(--bg3); border:1px solid var(--border); color:var(--teal); font-size:28px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:700; user-select:none; }
+.qty-btn:active { opacity:0.7; background:var(--bg2); }
+.qty-display { flex:1; background:var(--bg3); border:1px solid rgba(0,245,195,0.3); color:var(--teal); text-align:center; font-size:30px; font-weight:900; padding:12px; border-radius:12px; min-width:0; }
 .qty-note { font-size:11px; color:var(--dim); text-align:center; margin-top:4px; letter-spacing:1px; }
 
 /* ORDER COST */
@@ -107,18 +116,18 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
 .oc-lbl { font-size:13px; color:var(--dim); letter-spacing:1px; }
 .oc-val { font-size:22px; font-weight:900; color:#fff; }
 
-/* SUBMIT — BIG */
+/* SUBMIT */
 .btn-submit {
   width:100%; padding:22px; border-radius:14px; border:none;
   font-size:20px; font-weight:900; cursor:pointer; transition:all 0.15s;
-  background:var(--teal); color:#000; letter-spacing:1px;
+  background:var(--teal); color:#000; letter-spacing:1px; min-height:64px;
 }
 .btn-submit:disabled { background:var(--bg3); color:var(--dim); cursor:not-allowed; }
 .btn-submit.done { background:var(--bg3); color:var(--teal); border:2px solid var(--teal); font-size:17px; }
 .status-msg { text-align:center; font-size:14px; color:var(--dim); min-height:20px; }
 
-/* STATS */
-.stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+/* STATS — 2 columns now (no cash) */
+.stats-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
 .stat-box { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:14px 8px; text-align:center; }
 .stat-box .lbl { font-size:10px; color:var(--dim); letter-spacing:1px; margin-bottom:5px; }
 .stat-box .val { font-size:18px; font-weight:900; }
@@ -147,9 +156,11 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
 
 /* MOBILE */
 @media(max-width:700px){
-  .body { grid-template-columns:1fr; grid-template-rows:240px 1fr; }
-  .img-panel { border-right:none; border-bottom:1px solid var(--border); }
+  .body { grid-template-columns:1fr; grid-template-rows:auto 1fr; }
+  .img-panel { border-right:none; border-bottom:1px solid var(--border); min-height:200px; max-height:45vw; }
   .ctrl-panel { overflow-y:auto; }
+  /* Fixed timer on mobile */
+  .timer-block { position:sticky; top:0; z-index:10; }
 }
 </style>
 </head>
@@ -160,14 +171,19 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
   <h1>QuantX</h1>
   <p>IIT BHU · THE QUANT CLUB · LIVE TRADING</p>
   <div class="rbox">
-    <label>YOUR NAME</label>
-    <input id="name-inp" type="text" placeholder="Enter your full name" autocomplete="off">
     <label>YOUR EMAIL</label>
-    <input id="email-inp" type="email" placeholder="Enter your email address" autocomplete="off">
-    <div class="disclaimer">
-      ⚠️ Use the <span>exact same name and email</span> you used during QuantX registration. Wrong details will disqualify your entry.
+    <input id="email-inp" type="email" placeholder="Enter your registered email" autocomplete="off" inputmode="email">
+
+    <label>PASSWORD</label>
+    <input id="pwd-inp" type="password" placeholder="Your password" autocomplete="off">
+
+    <div class="pwd-hint">
+      🔑 Password = <span>first 4 letters of your name</span> (lowercase) + <span>last 4 digits of your phone</span><br>
+      Example: Aryan Sharma, 9876543210 → <span>arya3210</span>
     </div>
+
     <button class="btn-go" onclick="register()">ENTER THE MARKET →</button>
+    <div id="reg-err" style="color:var(--red);font-size:13px;margin-top:12px;text-align:center;min-height:18px;"></div>
   </div>
 </div>
 
@@ -195,8 +211,8 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
       <div class="tq-round" id="round-lbl">PRE-MARKET</div>
     </div>
     <div class="tq-portfolio">
-      <div class="lbl">PORTFOLIO VALUE</div>
-      <div class="val" id="portfolio-val">₹10,000</div>
+      <div class="lbl">TOTAL PnL</div>
+      <div class="val" id="portfolio-val">₹0</div>
     </div>
   </div>
 
@@ -259,12 +275,12 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
           </div>
         </div>
 
-        <!-- QUANTITY -->
+        <!-- QUANTITY — tap-friendly +/- buttons, no text input -->
         <div>
           <div class="sec-lbl">② SELECT QUANTITY</div>
           <div class="qty-row">
             <button class="qty-btn" onclick="chgQty(-1)">−</button>
-            <input class="qty-inp" type="number" id="qty" value="1" min="1" max="20">
+            <div class="qty-display" id="qty-display">1</div>
             <button class="qty-btn" onclick="chgQty(1)">+</button>
           </div>
           <div class="qty-note">MIN 1 — MAX 20 UNITS</div>
@@ -272,7 +288,7 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
 
         <!-- ORDER COST -->
         <div class="order-cost-box">
-          <div class="oc-lbl">ORDER COST</div>
+          <div class="oc-lbl">ORDER EXPOSURE</div>
           <div class="oc-val" id="order-cost">₹ —</div>
         </div>
 
@@ -285,12 +301,11 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
           <div class="status-msg" id="status-msg" style="margin-top:8px;"></div>
         </div>
 
-        <!-- STATS -->
+        <!-- STATS — PnL + Position only (no cash) -->
         <div>
           <div class="sec-lbl">YOUR STATS</div>
           <div class="stats-grid">
-            <div class="stat-box"><div class="lbl">CASH</div><div class="val nt" id="s-cash">₹10,000</div></div>
-            <div class="stat-box"><div class="lbl">PnL</div><div class="val nt" id="s-pnl">₹0</div></div>
+            <div class="stat-box"><div class="lbl">TOTAL PnL</div><div class="val nt" id="s-pnl">₹0</div></div>
             <div class="stat-box"><div class="lbl">POSITION</div><div class="val nt" id="s-pos">FLAT</div></div>
           </div>
         </div>
@@ -309,69 +324,87 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:'S
 </div><!-- end app -->
 
 <script>
-let pid=null,pname='',selDirection=null,lastTimerActive=false;
-let cash=10000,totalPnl=0,timerInterval=null,timerSec=0,currentRound=0;
+let pid=null, pname='', selDirection=null, lastTimerActive=false;
+let totalPnl=0, timerInterval=null, timerSec=0, currentRound=0;
+let qtyVal=1;
 let prevPrices={agw:420,nvt:1240,spk:680,cvt:4200,mri:890};
 const CIRCUM=239;
 
+// ── REGISTER ──
 async function register(){
-  const name=document.getElementById('name-inp').value.trim();
-  const email=document.getElementById('email-inp').value.trim();
-  if(!name){toast('Enter your name');return;}
-  if(!email||!email.includes('@')){toast('Enter a valid email');return;}
+  const email = document.getElementById('email-inp').value.trim();
+  const password = document.getElementById('pwd-inp').value.trim();
+  const errEl = document.getElementById('reg-err');
+  errEl.textContent = '';
+
+  if(!email || !email.includes('@')){ errEl.textContent='Enter a valid email'; return; }
+  if(!password){ errEl.textContent='Enter your password'; return; }
+
   try{
-    const r=await fetch('/api/participant/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email})});
-    const d=await r.json();
+    const r = await fetch('/api/participant/register', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email, password })
+    });
+    const d = await r.json();
     if(d.success){
-      pid=d.participantId; pname=name;
-      if(d.rejoined) toast('Welcome back, '+name+'!');
+      pid = d.participantId;
+      pname = d.name;
+      totalPnl = d.totalPnl || 0;
+      updateStatsUI();
+      document.getElementById('portfolio-val').textContent = (totalPnl>=0?'+':'')+'₹'+Math.round(totalPnl).toLocaleString();
+      if(d.rejoined) toast('Welcome back, '+pname+'!');
       document.getElementById('reg').style.display='none';
       document.getElementById('app').style.display='flex';
       startPolling();
     } else {
-      toast(d.message||'Registration failed');
+      errEl.textContent = d.message || 'Login failed';
     }
-  }catch(e){toast('Cannot connect to server');}
+  }catch(e){ errEl.textContent='Cannot connect to server'; }
 }
 
+// ── DIRECTION ──
 function selDir(dir){
   selDirection=dir;
-  document.getElementById('btn-buy').classList.toggle('sel',dir==='BUY');
-  document.getElementById('btn-sell').classList.toggle('sel',dir==='SELL');
+  document.getElementById('btn-buy').classList.toggle('sel', dir==='BUY');
+  document.getElementById('btn-sell').classList.toggle('sel', dir==='SELL');
   updateCost();
 }
 
+// ── QUANTITY — tap-friendly ──
 function chgQty(d){
-  const el=document.getElementById('qty');
-  el.value=Math.max(1,Math.min(20,(parseInt(el.value)||1)+d));
+  qtyVal = Math.max(1, Math.min(20, qtyVal + d));
+  document.getElementById('qty-display').textContent = qtyVal;
   updateCost();
 }
 
 function updateCost(){
-  const price=parseFloat(document.getElementById('live-price').textContent.replace(/[₹,\s—]/g,''))||0;
-  const qty=parseInt(document.getElementById('qty').value)||0;
-  document.getElementById('order-cost').textContent=price&&qty?'₹'+(price*qty).toLocaleString():'₹ —';
+  const priceText = document.getElementById('live-price').textContent.replace(/[₹,\s—]/g,'');
+  const price = parseFloat(priceText) || 0;
+  document.getElementById('order-cost').textContent = price && qtyVal ? '₹'+(price*qtyVal).toLocaleString() : '₹ —';
 }
 
+// ── SUBMIT ──
 async function submitOrder(){
-  if(!selDirection){toast('Select BUY or SELL first');return;}
-  const units=parseInt(document.getElementById('qty').value);
-  if(!units||units<1||units>20){toast('Units must be 1 to 20');return;}
+  if(!selDirection){ toast('Select BUY or SELL first'); return; }
+  if(qtyVal<1||qtyVal>20){ toast('Units must be 1 to 20'); return; }
   try{
-    const r=await fetch('/api/participant/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({participantId:pid,direction:selDirection,units})});
-    const d=await r.json();
+    const r = await fetch('/api/participant/order',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({participantId:pid, direction:selDirection, units:qtyVal})
+    });
+    const d = await r.json();
     if(d.success){
-      const btn=document.getElementById('submit-btn');
+      const btn = document.getElementById('submit-btn');
       btn.disabled=true; btn.classList.add('done');
-      btn.textContent='✓ '+selDirection+' '+units+' UNITS — ORDER PLACED';
-      cash=d.newBalance; updateStatsUI();
-      setStatus(selDirection+' '+units+' units submitted successfully','var(--teal)');
-      document.getElementById('s-pos').textContent=selDirection+' '+units;
+      btn.textContent='✓ '+selDirection+' '+qtyVal+' UNITS — ORDER PLACED';
+      setStatus(selDirection+' '+qtyVal+' units submitted successfully','var(--teal)');
+      document.getElementById('s-pos').textContent=selDirection+' '+qtyVal;
       document.getElementById('s-pos').className='val '+(selDirection==='BUY'?'up':'dn');
     }else{ toast(d.message||'Order failed'); }
-  }catch(e){toast('Network error');}
+  }catch(e){ toast('Network error'); }
 }
 
+// ── POLLING ──
 function startPolling(){
   setInterval(pollState,2000);
   setInterval(pollLB,5000);
@@ -394,7 +427,7 @@ async function pollState(){
       resetPanel(); startTimer(30);
       if(s.currentImage) document.getElementById('img-area').innerHTML='<img src="'+s.currentImage+'" alt="Round">';
     }
-    if(!s.timerActive&&lastTimerActive){ stopTimer(); lockPanel(); if(s.roundResult) showResult(s.roundResult); }
+    if(!s.timerActive&&lastTimerActive){ stopTimer(); lockPanel(); }
     lastTimerActive=s.timerActive;
   }catch(e){}
 }
@@ -404,7 +437,7 @@ async function pollLB(){
     const r=await fetch('/api/leaderboard');
     const board=await r.json();
     const el=document.getElementById('lb-list');
-    if(!board.length){el.innerHTML='<div style="font-size:13px;color:var(--dim);text-align:center;padding:12px">No participants yet</div>';return;}
+    if(!board.length){ el.innerHTML='<div style="font-size:13px;color:var(--dim);text-align:center;padding:12px;">No participants yet</div>'; return; }
     el.innerHTML=board.slice(0,10).map((p,i)=>{
       const rk=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
       const pc=p.totalPnl>=0?'up':'dn';
@@ -421,6 +454,7 @@ function updateTicker(prices){
     const curr=prices[k],prev=prevPrices[k],diff=curr-prev;
     const pct=((diff/prev)*100).toFixed(1);
     const pe=document.getElementById('t-'+k),ce=document.getElementById('tc-'+k);
+    if(!pe||!ce)return;
     pe.textContent='₹'+curr.toLocaleString();
     const cl=diff>0?'up':diff<0?'dn':'nt';
     pe.className='tk-price '+cl;
@@ -430,6 +464,7 @@ function updateTicker(prices){
   });
 }
 
+// ── TIMER ──
 function startTimer(sec){
   clearInterval(timerInterval); timerSec=sec;
   const num=document.getElementById('timer-num'),arc=document.getElementById('timer-arc');
@@ -441,8 +476,8 @@ function startTimer(sec){
     timerSec--;
     num.textContent=timerSec;
     arc.style.strokeDashoffset=(CIRCUM*(1-timerSec/sec)).toFixed(2);
-    if(timerSec<=8){num.className='timer-num urgent';arc.className='fg-circle urgent';}
-    if(timerSec<=0){clearInterval(timerInterval);lockPanel();}
+    if(timerSec<=8){ num.className='timer-num urgent'; arc.className='fg-circle urgent'; }
+    if(timerSec<=0){ clearInterval(timerInterval); lockPanel(); }
   },1000);
 }
 
@@ -462,18 +497,20 @@ function lockPanel(){
 
 function resetPanel(){
   selDirection=null;
+  qtyVal=1;
   document.getElementById('btn-buy').classList.remove('sel');
   document.getElementById('btn-sell').classList.remove('sel');
-  document.getElementById('qty').value=1;
+  document.getElementById('qty-display').textContent='1';
   document.getElementById('s-pos').textContent='FLAT';
   document.getElementById('s-pos').className='val nt';
   setStatus('','');
 }
 
+// ── RESULT OVERLAY ──
 function showResult(result){
   if(!result)return;
   const rp=result.roundPnl||0;
-  totalPnl+=rp; cash=result.newCash||cash; updateStatsUI();
+  totalPnl+=rp; updateStatsUI();
   const cd=result.correctDirection;
   document.getElementById('res-arrow').textContent=cd==='BUY'?'▲':cd==='SELL'?'▼':'—';
   document.getElementById('res-arrow').style.color=cd==='BUY'?'var(--teal)':'var(--red)';
@@ -486,11 +523,10 @@ function showResult(result){
 function closeResult(){ document.getElementById('result-ov').classList.remove('on'); }
 
 function updateStatsUI(){
-  document.getElementById('portfolio-val').textContent='₹'+(cash+totalPnl).toLocaleString();
-  document.getElementById('s-cash').textContent='₹'+Math.round(cash).toLocaleString();
-  const pe=document.getElementById('s-pnl');
-  pe.textContent=(totalPnl>=0?'+':'')+'₹'+Math.round(totalPnl).toLocaleString();
-  pe.className='val '+(totalPnl>0?'up':totalPnl<0?'dn':'nt');
+  const pnlEl=document.getElementById('s-pnl');
+  pnlEl.textContent=(totalPnl>=0?'+':'')+'₹'+Math.round(totalPnl).toLocaleString();
+  pnlEl.className='val '+(totalPnl>0?'up':totalPnl<0?'dn':'nt');
+  document.getElementById('portfolio-val').textContent=(totalPnl>=0?'+':'')+'₹'+Math.round(totalPnl).toLocaleString();
 }
 
 function toast(msg){
@@ -503,10 +539,9 @@ function setStatus(msg,color){
   el.textContent=msg; el.style.color=color||'var(--dim)';
 }
 
-document.getElementById('qty').addEventListener('input',function(){
-  this.value=Math.max(1,Math.min(20,parseInt(this.value)||1)); updateCost();
-});
-document.getElementById('name-inp').addEventListener('keydown',e=>{if(e.key==='Enter')register();});
+// keyboard submit on login
+document.getElementById('pwd-inp').addEventListener('keydown', e=>{ if(e.key==='Enter') register(); });
+document.getElementById('email-inp').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('pwd-inp').focus(); });
 </script>
 </body>
 </html>
