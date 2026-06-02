@@ -171,14 +171,14 @@ async function syncParticipantToSheet(p) {
     if (rowIndex === -1) {
       await sheets.spreadsheets.values.append({
         spreadsheetId: SHEET_ID,
-        range: 'Sheet1!A:F',
+        range: 'Sheet1!A:J',
         valueInputOption: 'RAW',
         resource: { values: [row] }
       });
     } else {
       await sheets.spreadsheets.values.update({
         spreadsheetId: SHEET_ID,
-        range: `Sheet1!A${rowIndex + 1}:F${rowIndex + 1}`,
+        range: `Sheet1!A${rowIndex + 1}:J${rowIndex + 1}`,
         valueInputOption: 'RAW',
         resource: { values: [row] }
       });
