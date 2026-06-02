@@ -191,14 +191,25 @@ async function syncParticipantToSheet(p) {
 async function syncAllToSheet() {
   try {
     const sheets = await getSheets();
-    const allRows = Object.values(participants).map(p =>
-      [p.id, p.name, p.email||'', p.totalPnl, p.round, p.registeredAt]
-    );
-    if (!allRows.length) return;
-    await sheets.spreadsheets.values.clear({
-      spreadsheetId: SHEET_ID,
-      range: 'Sheet1!A2:F1000'
-    });
+    const allRows = Object.values(participants).map(p => [
+  p.id,                               // participant_id
+  p.name,                             // name
+  p.email || '',                      // mail
+  10000 + p.totalPnl,                 // cash_balance
+  p.position || 'FLAT',               // current_position
+  p.units || 0,                       // units_held
+  p.entryPrice || 0,                  // entry_price
+  p.totalPnl || 0,                    // total_pnl
+  p.round || 0,                       // round_number
+  new Date().toISOString()            // last_action
+]);
+
+if (!allRows.length) return;
+
+await sheets.spreadsheets.values.clear({
+  spreadsheetId: SHEET_ID,
+  range: 'Sheet1!A2:J1000'
+});
     await sheets.spreadsheets.values.update({
       spreadsheetId: SHEET_ID,
       range: 'Sheet1!A2',
