@@ -245,9 +245,36 @@ app.post('/api/admin/start-round', async (req, res) => {
     gameState.timerActive      = true;
     gameState.gameActive       = true;
 
-    setTimeout(() => {
-      gameState.timerActive = false;
-    }, 100000);
+    setTimeout(async () => {
+  if (!gameState.timerActive) return;
+
+  gameState.timerActive = false;
+
+  const futurePrice = gameState.futurePrice;
+  const currentPrice = gameState.currentPrice;
+  const difference = futurePrice - currentPrice;
+
+  Object.values(participants).forEach(p => {
+    if (p.units === 0 || p.position === 'FLAT') return;
+
+    let roundPnl = 0;
+
+    if (p.position === 'BUY')
+      roundPnl = p.units * difference;
+
+    if (p.position === 'SELL')
+      roundPnl = p.units * (-difference);
+
+    p.totalPnl += roundPnl;
+    p.position = 'FLAT';
+    p.units = 0;
+    p.entryPrice = 0;
+  });
+
+  await syncAllToSheet();
+
+  console.log(`Round ${gameState.currentRound} auto-ended`);
+}, 100000);
 
     res.json({ success: true, gameState });
   } catch (e) {
