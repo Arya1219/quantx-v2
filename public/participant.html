@@ -424,7 +424,7 @@ async function pollState(){
     }
     if(s.prices) updateTicker(s.prices);
     if(s.timerActive&&!lastTimerActive){
-      resetPanel(); startTimer(30);
+      resetPanel(); startTimer(100);
       if(s.currentImage) document.getElementById('img-area').innerHTML='<img src="'+s.currentImage+'" alt="Round">';
     }
     if(!s.timerActive&&lastTimerActive){ stopTimer(); lockPanel(); }
