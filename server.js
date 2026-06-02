@@ -155,7 +155,18 @@ async function syncParticipantToSheet(p) {
     });
     const ids = (res.data.values || []).map(r => r[0]);
     const rowIndex = ids.indexOf(p.id);
-    const row = [p.id, p.name, p.email||'', p.totalPnl, p.round, p.registeredAt];
+    const row = [
+ p.id,
+ p.name,
+ p.email || '',
+ 10000 + p.totalPnl,
+ p.position,
+ p.units,
+ p.entryPrice,
+ p.totalPnl,
+ p.round,
+ new Date().toISOString()
+];
 
     if (rowIndex === -1) {
       await sheets.spreadsheets.values.append({
