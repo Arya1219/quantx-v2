@@ -117,13 +117,13 @@ td { padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.04); }
   <div class="card">
     <h2>① POST ROUND — DATA FETCHED FROM SHEET AUTOMATICALLY</h2>
 
-    <div class="phase-label">PHASE 1 — SIGNAL (Rounds 1–5)</div>
+    <div class="phase-label">PHASE 1 (Rounds 1–14)</div>
     <div class="round-grid" id="phase1-grid"></div>
 
-    <div class="phase-label">PHASE 2 — NOISE (Rounds 6–10)</div>
+    <div class="phase-label">PHASE 2 (Rounds 15–28)</div>
     <div class="round-grid" id="phase2-grid"></div>
 
-    <div class="phase-label">PHASE 3 — PRESSURE (Rounds 11–15)</div>
+    <div class="phase-label">PHASE 3 (Rounds 29–40)</div>
     <div class="round-grid" id="phase3-grid"></div>
   </div>
 
@@ -165,14 +165,26 @@ let completedRounds = new Set();
 
 // Build round buttons
 function buildRoundButtons() {
-  ['phase1-grid','phase2-grid','phase3-grid'].forEach((id, pi) => {
+  const grids = ['phase1-grid','phase2-grid','phase3-grid'];
+
+  grids.forEach((id, pi) => {
     const grid = document.getElementById(id);
-    const start = pi * 5 + 1;
-    for (let i = start; i < start + 5; i++) {
+
+    const start =
+      pi === 0 ? 1 :
+      pi === 1 ? 15 :
+      29;
+
+    const end =
+      pi === 0 ? 14 :
+      pi === 1 ? 28 :
+      40;
+
+    for (let i = start; i <= end; i++) {
       const btn = document.createElement('button');
       btn.className = 'btn-round';
       btn.id = 'rb-' + i;
-      btn.textContent = 'Round ' + i;
+      btn.textContent = 'R' + i;
       btn.onclick = () => startRound(i);
       grid.appendChild(btn);
     }
@@ -180,7 +192,7 @@ function buildRoundButtons() {
 }
 
 function highlightRoundButtons() {
-  for (let i = 1; i <= 15; i++) {
+  for (let i = 1; i <= 40; i++) {
     const btn = document.getElementById('rb-' + i);
     if (!btn) continue;
     btn.className = 'btn-round';
