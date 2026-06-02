@@ -225,7 +225,7 @@ app.post('/api/admin/start-round', async (req, res) => {
 
     setTimeout(() => {
       gameState.timerActive = false;
-    }, 30000);
+    }, 100000);
 
     res.json({ success: true, gameState });
   } catch (e) {
