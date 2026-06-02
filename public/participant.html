@@ -419,7 +419,7 @@ async function pollState(){
     updateCost();
     if(s.currentRound>0){
       currentRound=s.currentRound;
-      document.getElementById('round-lbl').textContent='ROUND '+s.currentRound+' / 15';
+      document.getElementById('round-lbl').textContent='ROUND '+s.currentRound+' / 40';
       document.getElementById('round-badge').textContent='ROUND '+s.currentRound;
     }
     if(s.prices) updateTicker(s.prices);
